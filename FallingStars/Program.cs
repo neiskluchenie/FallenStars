@@ -9,6 +9,7 @@ namespace FallingStars
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             bool gameRunning = true; //цикл
@@ -23,9 +24,19 @@ namespace FallingStars
 
             Console.CursorVisible = false; // скрываем противную мигающую каретку
 
-            int starX = 20;
-            int starY = 0;
-            int oldStarY = 0;
+            Star s1 = new Star(20, 0, '*'); //первый экземпляр класса Стар
+            Star s2 = new Star(30, 0, '*');
+            Star s3 = new Star(40, 0, '*');
+            Star s4 = new Star(50, 0, '*');
+            Star s5 = new Star(60, 0, '*');
+
+            List<Star> sList = new List<Star>(); // создаем список объектов наших звездочек
+
+            sList.Add(s1); //добавляем в этот список наши звездочки
+            sList.Add(s2);
+            sList.Add(s3);
+            sList.Add(s4);
+            sList.Add(s5);
 
             int tick = 300;
             int elapsedTime;
@@ -46,7 +57,7 @@ namespace FallingStars
                         case ConsoleKey.LeftArrow:
                             if (locationX > 0) // если мы не выходим за границу экрана
                             {
-                                oldLocation = locationX+4;
+                                oldLocation = locationX + 4;
                                 locationX--; // двигаемся влево
                             }
                             break;
@@ -68,8 +79,11 @@ namespace FallingStars
                 elapsedTime = (int)timer.ElapsedMilliseconds;
                 if (elapsedTime > tick)
                 {
-                    oldStarY = starY;
-                    starY++;
+                    foreach (Star s in sList)
+                    {
+                        s.Move();
+                    }
+                    
                     timer.Restart();
                 }
 
@@ -79,16 +93,16 @@ namespace FallingStars
                     {
                         //Console.SetCursorPosition(1 + 2 * columnX, lineY);
 
-                        if (columnX == starX && lineY == starY)
+                        foreach (Star s in sList)
                         {
-                            Console.SetCursorPosition(starX, oldStarY);
-                            Console.Write(" ");
-                            Console.SetCursorPosition(starX, starY);
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write("*");
+                            if (columnX == s.x && lineY == s.y)
+                            {
+                                s.Draw();
+                            }
+
                         }
 
-                        else if (columnX == locationX && lineY == locationY)
+                        if (columnX == locationX && lineY == locationY)
                         {
                             Console.SetCursorPosition(oldLocation, locationY);
                             Console.Write(" ");

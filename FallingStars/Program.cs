@@ -16,7 +16,7 @@ namespace FallingStars
             ConsoleKeyInfo userKey; // наша переменная
 
             int locationX = 10;
-            int locationY = 10; // строка нашей платформы
+            int locationY = 35; // строка нашей платформы
             int oldLocation = 0;
 
             Console.WindowWidth = 80;
@@ -24,19 +24,18 @@ namespace FallingStars
 
             Console.CursorVisible = false; // скрываем противную мигающую каретку
 
-            Star s1 = new Star(20, 0, '*'); //первый экземпляр класса Стар
-            Star s2 = new Star(30, 0, '*');
-            Star s3 = new Star(40, 0, '*');
-            Star s4 = new Star(50, 0, '*');
-            Star s5 = new Star(60, 0, '*');
+            int basicX = 0;
 
             List<Star> sList = new List<Star>(); // создаем список объектов наших звездочек
 
-            sList.Add(s1); //добавляем в этот список наши звездочки
-            sList.Add(s2);
-            sList.Add(s3);
-            sList.Add(s4);
-            sList.Add(s5);
+            for (int p = 0; p < 10; p++) //несколько раз
+            {
+                Random r = new Random(); //генератор случайного положения звездочек
+                int random = r.Next(6, 10);
+                Star s = new Star(basicX, 0, '*'); //создаем звездочку с заданными координатами
+                basicX += random; //меняем координату
+                sList.Add(s); //добавляем звездочку в список
+            }
 
             int tick = 300;
             int elapsedTime;

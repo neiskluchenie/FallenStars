@@ -27,21 +27,33 @@ namespace FallingStars
             int basicX = 0;
 
             List<Star> sList = new List<Star>(); // создаем список объектов наших звездочек
+            Random r = new Random(); //генератор случайного положения звездочек
+            Random speed = new Random();
 
             for (int p = 0; p < 10; p++) //несколько раз
             {
-                Random r = new Random(); //генератор случайного положения звездочек
+               
                 int random = r.Next(6, 10);
-                Star s = new Star(basicX, 0, '*'); //создаем звездочку с заданными координатами
+
+                int starSpeed = speed.Next(200, 600);
+
+                Star s = new Star(basicX, 0, '*',starSpeed); //создаем звездочку с заданными координатами
                 basicX += random; //меняем координату
                 sList.Add(s); //добавляем звездочку в список
             }
 
-            int tick = 300;
-            int elapsedTime;
+            
+            
 
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
+            //foreach (Star s in sList)
+            //{
+            //    s.Move();
+            //}
+            //int tick = 300;
+            //int elapsedTime;
+
+            //Stopwatch timer = new Stopwatch();
+            //timer.Start();
 
             while (gameRunning)
             {
@@ -75,17 +87,20 @@ namespace FallingStars
                     }
                 }
                 //таймер
-                elapsedTime = (int)timer.ElapsedMilliseconds;
-                if (elapsedTime > tick)
-                {
-                    foreach (Star s in sList)
-                    {
-                        s.Move();
-                    }
-                    
-                    timer.Restart();
-                }
+                //elapsedTime = (int)timer.ElapsedMilliseconds;
+                //if (elapsedTime > tick)
+                //{
+                //    foreach (Star s in sList)
+                //    {
+                //        s.Move();
+                //    }
 
+                //    timer.Restart();
+                //}
+                foreach (Star s in sList)
+                {
+                    s.Move();
+                }
                 for (int lineY = 0; lineY < 40; lineY++)
                 {
                     for (int columnX = 0; columnX < 80; columnX++)

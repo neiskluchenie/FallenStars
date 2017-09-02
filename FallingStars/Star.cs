@@ -9,62 +9,69 @@ namespace FallingStars
 {
     class Star
     {
+                                            // все упомянутые символы берутся для конкретного экземпляра класса
+                                            //координаты х,у, и скорость 
         public int x;
         public int y;
-        public char sym;
         public int starSpeed;
 
-        public int oldY;
+        public bool isActive=true;
 
-        int tick = 300;
+        public int oldY;                    // старая у для затирания пустым символом
+
+        Stopwatch sTimer = new Stopwatch(); //таймер и прошедшее время
         int elapsedTime;
-
-        Stopwatch sTimer = new Stopwatch();
-
-        Random s = new Random();
 
         public Star() { }
 
-        public Star(int _x, int _y, char _sym, int _starSpeed) //конструктор
+        public Star(int _x, int _y, int _starSpeed) //конструктор
         {
             x = _x;
             y = _y;
-            sym = _sym;
             starSpeed = _starSpeed;
         }
 
-        public void Move()
+        public void Move()                          //движение звезды
         {
-            sTimer.Start();
-            //int random = s.Next(200, 600);
-            //while (true)
-            //{
-                elapsedTime = (int)sTimer.ElapsedMilliseconds;
+            sTimer.Start();                         //старт таймера
+            elapsedTime = (int)sTimer.ElapsedMilliseconds; //записываем прошедшее время в переменную
 
-                if (elapsedTime > starSpeed)
-                {
-                    oldY = y;
-                    y++;
-                    sTimer.Restart();
-                }
-
-                //oldY = y;
-                //y++;
-            //}
+            if (elapsedTime > starSpeed)            // если времени прошло достаточно
+            {
+                oldY = y;                           //создаем координату для затирания
+                y++;                                //сдвигаем звезду
+                sTimer.Restart();                   //перезапускаем таймер
+            }
         }
 
-        public void Draw() // все упомянутые символы берутся для конкретного экземпляра класса
+        public void Draw() 
         {
-            Console.SetCursorPosition(x, oldY);
+            if (y==39)
+            {
+                Console.SetCursorPosition(x, y);        //ставим в новую координату, пишем красным звезду
+                Console.Write(" ");
+                Console.SetCursorPosition(x, oldY);     //ставим в старую координату и затираем
+                Console.Write(" ");
+
+                
+            }
+
+            else
+            {
+                Console.SetCursorPosition(x, y);        //ставим в новую координату, пишем красным звезду
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write('*');
+                Console.SetCursorPosition(x, oldY);     //ставим в старую координату и затираем
+                Console.Write(" ");
+            }
+           
+        }
+        public void DrawVoid()
+        {
+            Console.SetCursorPosition(x, y);        //ставим в новую координату, пишем красным звезду
             Console.Write(" ");
-            Console.SetCursorPosition(x, y);
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(sym);
+            Console.SetCursorPosition(x, oldY);     //ставим в старую координату и затираем
+            Console.Write(" ");
         }
-
-
-        // может быть в каждой точке я смогу прописать метод мув, который будет брать координаты конкретно этой точки и изменять их каждый тик таймера.
-        // как таймер дотикает, он будет обращаться по очереди к каждой точке на экране и вызывать у них этот метод
-
     }
 }

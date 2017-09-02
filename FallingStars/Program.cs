@@ -12,120 +12,117 @@ namespace FallingStars
 
         static void Main(string[] args)
         {
+            Console.WindowWidth = 120;
+            Console.WindowHeight = 45;
+            Console.CursorVisible = false; // скрываем противную мигающую каретку
+
+            //for (int x = 5; x < 75; x++)
+            //{
+            //    Console.SetCursorPosition(x, 40);
+            //    Console.ForegroundColor = ConsoleColor.Red;
+            //    Console.Write('*');
+            //}
+
+            int locationX = 36;     //начальное положение игрока
+            int locationY = 32;
+            int oldLocation = 0;    // старое положение игрока для затирания
+
+            List<Star> sList = new List<Star>(); // создаем список объектов наших звездочек
+            int starCount = 0;                     //количество звезд на экране, в начале = 0
+
+            Random r = new Random();            //генератор случайного положения звездочек
+            Random speed = new Random();        //случайная скорость звездочек
+            Random starSpawn = new Random();    //случайная задержка перед появлением каждой звездочки
+
+            Stopwatch spawnTimer = new Stopwatch(); // таймер для задержки перед появлением звездочек
+            spawnTimer.Start();
+            int elapsedTime = 0;
+
             bool gameRunning = true; //цикл
             ConsoleKeyInfo userKey; // наша переменная
 
-            int locationX = 10;
-            int locationY = 35; // строка нашей платформы
-            int oldLocation = 0;
-
-            Console.WindowWidth = 80;
-            Console.WindowHeight = 40;
-
-            Console.CursorVisible = false; // скрываем противную мигающую каретку
-
-            int basicX = 0;
-
-            List<Star> sList = new List<Star>(); // создаем список объектов наших звездочек
-            Random r = new Random(); //генератор случайного положения звездочек
-            Random speed = new Random();
-
-            for (int p = 0; p < 10; p++) //несколько раз
-            {
-               
-                int random = r.Next(6, 10);
-
-                int starSpeed = speed.Next(200, 600);
-
-                Star s = new Star(basicX, 0, '*',starSpeed); //создаем звездочку с заданными координатами
-                basicX += random; //меняем координату
-                sList.Add(s); //добавляем звездочку в список
-            }
-
-            
-            
-
-            //foreach (Star s in sList)
-            //{
-            //    s.Move();
-            //}
-            //int tick = 300;
-            //int elapsedTime;
-
-            //Stopwatch timer = new Stopwatch();
-            //timer.Start();
-
             while (gameRunning)
             {
-                // Если клавиша нажата
-                if (Console.KeyAvailable)
+                if (starCount < 15)                                     //всего звезд на экране
                 {
-                    // мы передаем информацию о нажатой клавише в нашу переменную
-                    userKey = Console.ReadKey(true);
+                    elapsedTime = (int)spawnTimer.ElapsedMilliseconds;  //записываем время со старта
+                    int spawn = starSpawn.Next(300, 600);               //задаем случайный интервал
+                    if (elapsedTime > spawn)                            // через который будет появляться звездочка
+                    {
+                        int random = r.Next(5, 75);                     // в случайной координате по х
+                        int starSpeed = speed.Next(25, 100);            // и со случайной скоростью
 
-                    switch (userKey.Key) // и в зависимости от того, какая клавиша нажата
+                        Star s = new Star(random, 3, starSpeed);        //создаем звездочку с заданными координатами и скоростью
+
+                        sList.Add(s);                                   //добавляем звездочку в список
+                        starCount++;                                    // увеличиваем отслеживаемое количество звезд на экране
+                        spawnTimer.Restart();                           //сбрасываем таймер
+                    }
+                }
+
+                if (Console.KeyAvailable)               // Если клавиша нажата
+                {
+                    userKey = Console.ReadKey(true);    // мы передаем информацию о нажатой клавише в нашу переменную
+
+                    switch (userKey.Key)                // и в зависимости от того, какая клавиша нажата
                     {
                         case ConsoleKey.LeftArrow:
-                            if (locationX > 0) // если мы не выходим за границу экрана
+                            if (locationX > 5)           // если мы не выходим за границу экрана
                             {
                                 oldLocation = locationX + 4;
-                                locationX--; // двигаемся влево
+                                locationX--;            // двигаемся влево
                             }
                             break;
 
                         case ConsoleKey.RightArrow:
-                            if (locationX < 78) // если мы не выходим за границу экрана
+                            if (locationX < 70)         // если мы не выходим за границу экрана
                             {
                                 oldLocation = locationX;
-                                locationX++;  //двигаемся вправо
+                                locationX++;            //двигаемся вправо
                             }
                             break;
 
-                        case ConsoleKey.Escape: // Если жмем выход
+                        case ConsoleKey.Escape:         // Если жмем выход
                             gameRunning = false;
                             break;
                     }
                 }
-                //таймер
-                //elapsedTime = (int)timer.ElapsedMilliseconds;
-                //if (elapsedTime > tick)
-                //{
-                //    foreach (Star s in sList)
-                //    {
-                //        s.Move();
-                //    }
 
-                //    timer.Restart();
-                //}
-                foreach (Star s in sList)
+                for (int lineY = 3; lineY < 40; lineY++)                // проходимся по каждой клеточке нашего игрового поля
                 {
-                    s.Move();
-                }
-                for (int lineY = 0; lineY < 40; lineY++)
-                {
-                    for (int columnX = 0; columnX < 80; columnX++)
+                    for (int columnX = 5; columnX < 75; columnX++)
                     {
-                        //Console.SetCursorPosition(1 + 2 * columnX, lineY);
-
-                        foreach (Star s in sList)
+                        if (columnX == locationX && lineY == locationY) //и, если координаты совпадают с координатами платформы
                         {
-                            if (columnX == s.x && lineY == s.y)
-                            {
-                                s.Draw();
-                            }
-
-                        }
-
-                        if (columnX == locationX && lineY == locationY)
-                        {
-                            Console.SetCursorPosition(oldLocation, locationY);
+                            Console.SetCursorPosition(oldLocation, locationY); //мы затираем старую позицию
                             Console.Write(" ");
-                            Console.SetCursorPosition(locationX, locationY);
+                            Console.SetCursorPosition(locationX, locationY); // и рисуем на новых координатах
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write("#####");
                         }
 
+                        foreach (Star s in sList)           // для каждой звездочки в нашем списке
+                        {
+                            if (s.y == 40)                  //а когда звезда достигла края стакана
+                            {
+                                starCount--;                // мы удаляем ее из отслеживаемых звезд
+                            }
+
+                            if (columnX == s.x && lineY == s.y) //если координаты совпадают с координатами нашей звезды
+                            {
+                                s.Draw(); //мы ее рисуем
+                            }
+
+                            if (s.x == locationX && s.y == locationY) //и, если координаты совпадают с координатами платформы
+                            {
+                                s.y = 39; // мы перемещаем точку в координаты, в которых она не отображается
+                            }
+                        }
                     }
+                }
+                foreach (Star s in sList)
+                {
+                    s.Move();
                 }
 
             }

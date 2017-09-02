@@ -23,9 +23,7 @@ namespace FallingStars
             //    Console.Write('*');
             //}
 
-            int locationX = 36;     //начальное положение игрока
-            int locationY = 32;
-            int oldLocation = 0;    // старое положение игрока для затирания
+            Player p = new Player(32, 36);
 
             List<Star> sList = new List<Star>(); // создаем список объектов наших звездочек
             int starCount = 0;                     //количество звезд на экране, в начале = 0
@@ -67,19 +65,11 @@ namespace FallingStars
                     switch (userKey.Key)                // и в зависимости от того, какая клавиша нажата
                     {
                         case ConsoleKey.LeftArrow:
-                            if (locationX > 5)           // если мы не выходим за границу экрана
-                            {
-                                oldLocation = locationX + 4;
-                                locationX--;            // двигаемся влево
-                            }
+                            p.MoveLeft();
                             break;
 
                         case ConsoleKey.RightArrow:
-                            if (locationX < 70)         // если мы не выходим за границу экрана
-                            {
-                                oldLocation = locationX;
-                                locationX++;            //двигаемся вправо
-                            }
+                            p.MoveRight();
                             break;
 
                         case ConsoleKey.Escape:         // Если жмем выход
@@ -92,13 +82,9 @@ namespace FallingStars
                 {
                     for (int columnX = 5; columnX < 75; columnX++)
                     {
-                        if (columnX == locationX && lineY == locationY) //и, если координаты совпадают с координатами платформы
+                        if (columnX == p.locationX && lineY == p.locationY) //и, если координаты совпадают с координатами платформы
                         {
-                            Console.SetCursorPosition(oldLocation, locationY); //мы затираем старую позицию
-                            Console.Write(" ");
-                            Console.SetCursorPosition(locationX, locationY); // и рисуем на новых координатах
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write("#####");
+                            p.DrawPlayer();
                         }
 
                         foreach (Star s in sList)           // для каждой звездочки в нашем списке
@@ -113,7 +99,7 @@ namespace FallingStars
                                 s.Draw(); //мы ее рисуем
                             }
 
-                            if (s.x == locationX && s.y == locationY) //и, если координаты совпадают с координатами платформы
+                            if (s.x == p.locationX && s.y == p.locationY) //и, если координаты совпадают с координатами платформы
                             {
                                 s.y = 39; // мы перемещаем точку в координаты, в которых она не отображается
                             }

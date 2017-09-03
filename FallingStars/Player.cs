@@ -10,7 +10,7 @@ namespace FallingStars
     {
         public int locationX;
         public int locationY;
-        public int oldLocation;
+        public int oldLocation;   
 
         public Player(int _x, int _y) //конструктор
         {
@@ -43,11 +43,11 @@ namespace FallingStars
             Console.SetCursorPosition(oldLocation, locationY); //мы затираем старую позицию
             Console.Write(" ");
             Console.SetCursorPosition(locationX, locationY); // и рисуем на новых координатах
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("#####");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("{=^=}");
         }
        
-        //public void DrawPlayer()
+        //public void DrawPlayer1()
 
         //{
         //    int x1 = locationX - 1;
@@ -71,4 +71,5 @@ namespace FallingStars
         // после чего я буду рисовать игрока - ставить курсор в нужные координаты и рисовать символы
 
     }
+
 }

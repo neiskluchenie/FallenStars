@@ -15,8 +15,6 @@ namespace FallingStars
         public int y;
         public int starSpeed;
 
-        public bool isActive=true;
-
         public int oldY;                    // старая у для затирания пустым символом
 
         Stopwatch sTimer = new Stopwatch(); //таймер и прошедшее время
@@ -46,7 +44,7 @@ namespace FallingStars
 
         public void Draw() 
         {
-            if (y==39)
+            if (y==41)
             {
                 Console.SetCursorPosition(x, y);        //ставим в новую координату, пишем красным звезду
                 Console.Write(" ");
